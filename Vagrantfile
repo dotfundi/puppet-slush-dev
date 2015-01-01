@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/trusty32"
 
   config.vm.define "nodedev" do | nodedev |
-    nodedev.vm.hostname = "node-dev" 
+    nodedev.vm.hostname = "slush-dev" 
     #sync folders
     nodedev.vm.synced_folder "./www", "/home/vagrant", create: true
 
@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     nodedev.vm.provision :puppet do | puppet |
      puppet.module_path = "puppet/modules"
      puppet.manifests_path = "puppet/manifests"
-     puppet.manifest_file = "nodedev.pp"
+     puppet.manifest_file = "slushdev.pp"
     end
   end
 

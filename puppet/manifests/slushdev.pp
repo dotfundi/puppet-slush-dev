@@ -1,10 +1,22 @@
 include git
 
-node 'node-dev' {
+node 'slush-dev' {
 
   #node
   class { 'nodejs':
    version => 'stable',
+  }
+
+  file { "/home/vagrant/.npm":
+   ensure => "directory",
+   owner  => "vagrant",
+    mode   => 777,
+  }
+
+  package { 'npm':
+    provider => 'npm',
+    ensure => '2.1.12',
+    require  => Class['nodejs']
   }
 
   package { 'bower':
