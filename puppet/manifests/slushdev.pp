@@ -15,7 +15,7 @@ node 'slush-dev' {
 
   package { 'npm':
     provider => 'npm',
-    ensure => '2.1.12',
+    ensure => '2.*',
     require  => Class['nodejs']
   }
 

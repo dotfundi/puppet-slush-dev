@@ -8,18 +8,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   config.vm.box = "ubuntu/trusty32"
 
-  config.vm.define "nodedev" do | nodedev |
-    nodedev.vm.hostname = "slush-dev" 
+  config.vm.define "slushdev" do | slushdev |
+    slushdev.vm.hostname = "slush-dev" 
     #sync folders
-    nodedev.vm.synced_folder "./www", "/home/vagrant", create: true
+    slushdev.vm.synced_folder "./www", "/home/vagrant/www", create: true
 
     #port forward
-    nodedev.vm.network  :forwarded_port, host: 9000,  guest: 9000    # Express
-    nodedev.vm.network  :forwarded_port, host: 35729, guest: 35729   # LiveReload
-    nodedev.vm.network  :forwarded_port, host: 27017, guest: 27017   # MongoDB
+    slushdev.vm.network  :forwarded_port, host: 9000,  guest: 9000    # Express
+    slushdev.vm.network  :forwarded_port, host: 35729, guest: 35729   # LiveReload
+    slushdev.vm.network  :forwarded_port, host: 27017, guest: 27017   # MongoDB
 
-    nodedev.vm.provision :puppet do | puppet |
-     puppet.module_path = "puppet/modules"
+    config.vm.provision :shell do |shell|
+      shell.inline = "mkdir -p /etc/puppet/modules;
+                  puppet module install willdurand-nodejs;
+                  puppet module install puppetlabs-mongodb;
+                  puppet module install puppetlabs-git"
+    end
+
+    slushdev.vm.provision :puppet do | puppet |
+     #puppet.module_path = "puppet/modules"
      puppet.manifests_path = "puppet/manifests"
      puppet.manifest_file = "slushdev.pp"
     end
